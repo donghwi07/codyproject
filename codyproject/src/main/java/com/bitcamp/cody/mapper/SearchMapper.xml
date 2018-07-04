@@ -1,0 +1,58 @@
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bitcamp.cody.dao.SearchDao">
+
+
+
+	<select id="searchItem"
+		resultType="com.bitcamp.cody.dto.ItemDto">
+		SELECT * FROM ITEM WHERE ITEM_NAME LIKE CONCAT('%',#{keyword1},'%');
+	</select>
+	
+	<select id="searchItemMan"
+		resultType="com.bitcamp.cody.dto.ItemDto">
+		SELECT * FROM item,cody WHERE cody.cody_idx=item.cody_idx and cody_gender=1;
+	</select>
+	
+	<select id="searchItemWoman"
+		resultType="com.bitcamp.cody.dto.ItemDto">
+		SELECT * FROM item,cody WHERE cody.cody_idx=item.cody_idx and cody_gender=0;
+	</select>
+	
+	<select id="searchCody"
+		resultType="com.bitcamp.cody.dto.CodyDto">
+		SELECT * FROM CODY WHERE cody_title LIKE CONCAT('%',#{keyword2},'%');
+	</select>
+	
+	<select id="searchCodyMan"
+		resultType="com.bitcamp.cody.dto.CodyDto">
+		SELECT * FROM item,cody WHERE cody.cody_idx=item.cody_idx and cody_gender=1;
+	</select>
+	
+	<select id="searchCodyWoman"
+		resultType="com.bitcamp.cody.dto.CodyDto">
+		SELECT * FROM item,cody WHERE cody.cody_idx=item.cody_idx and cody_gender=0;
+	</select>
+	
+	<select id="searchMember"
+		resultType="com.bitcamp.cody.dto.MemberDto">
+		SELECT * FROM MEMBER WHERE member_id LIKE CONCAT('%',#{keyword3},'%');		
+	</select>
+	
+	<select id="searchMemberMan"
+		resultType="com.bitcamp.cody.dto.MemberDto">
+        select * from member where member_id in (SELECT distinct member_id FROM member,cody WHERE cody.member_idx=member.member_idx and cody_gender=1);	
+	</select>
+	
+	<select id="searchMemberWoman"
+		resultType="com.bitcamp.cody.dto.MemberDto">
+		select * from member where member_id in (SELECT distinct member_id FROM member,cody WHERE cody.member_idx=member.member_idx and cody_gender=0);
+	</select>
+	
+	<select id="selectId" resultType="com.bitcamp.cody.dto.MemberDto">
+		select * from member where member_idx = #{member_idx}
+	</select>
+
+</mapper>

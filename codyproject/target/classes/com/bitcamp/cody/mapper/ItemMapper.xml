@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Dao 에서 메퍼 설정에서 필요한 엘리먼트(설정) 호출할때 식별자 역할 : 필수 -->
+<mapper namespace="com.bitcamp.cody.dao.ItemDao">
+
+	<!-- select 구문일 때 사용하는 태그 -->
+	<!-- ID : 외부에서 해당 태그를 부를 때 사용하는 식별 이름, 메퍼 파일안에서 중복 X resultType : 질의의 결과를 
+		지정하는 클래스타입의 객체에 데이터 메핑 parameterType : 여러 데이터를 하나의 객체에 담아서 받을 때 해당 객체 타입으로 
+		지정 -->
+
+	<select id="selectByIdx" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from item where item_idx = #{idx}
+	</select>
+
+	<select id="selectByMemberIdx" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from item where member_idx = #{memberIdx}
+	</select>
+
+	<select id="selectByCodyIdx" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from item where cody_idx = #{codyIdx}
+	</select>
+
+	<select id="selectList" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from item
+	</select>
+	<select id="selectListMan" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from cody.cody ,cody.item where cody.cody_idx=item.cody_idx and cody_gender = 1
+	</select>
+	<select id="selectListWoman" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from cody.cody ,cody.item where cody.cody_idx=item.cody_idx and cody_gender = 0
+	</select>
+	
+	<select id="selectListCap" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from item where item_category = "모자"
+	</select>
+	<select id="selectListCapMan" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from cody.cody ,cody.item where cody.cody_idx=item.cody_idx and item_category = '모자' and cody_gender = 1
+	</select>
+	<select id="selectListCapWoman" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from cody.cody ,cody.item where cody.cody_idx=item.cody_idx and item_category = '모자' and cody_gender = 0
+	</select>
+	<select id="selectListTop" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from item where item_category = "상의"
+	</select>
+	<select id="selectListTopMan" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from cody.cody ,cody.item where cody.cody_idx=item.cody_idx and item_category = '상의' and cody_gender = 1
+	</select>
+	<select id="selectListTopWoman" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from cody.cody ,cody.item where cody.cody_idx=item.cody_idx and item_category = '상의' and cody_gender = 0
+	</select>
+	<select id="selectListBot" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from item where item_category = "하의"
+	</select>
+	<select id="selectListBotMan" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from cody.cody ,cody.item where cody.cody_idx=item.cody_idx and item_category = '하의' and cody_gender = 1
+	</select>
+	<select id="selectListBotWoman" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from cody.cody ,cody.item where cody.cody_idx=item.cody_idx and item_category = '하의' and cody_gender = 0
+	</select>
+	<select id="selectListOut" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from item where item_category = "아우터"
+	</select>
+	<select id="selectListOutMan" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from cody.cody ,cody.item where cody.cody_idx=item.cody_idx and item_category = '아우터' and cody_gender = 1
+	</select>
+	<select id="selectListOutWoman" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from cody.cody ,cody.item where cody.cody_idx=item.cody_idx and item_category = '아우터' and cody_gender = 0
+	</select>
+	<select id="selectListShoe" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from item where item_category = "신발"
+	</select>
+	<select id="selectListShoeMan" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from cody.cody ,cody.item where cody.cody_idx=item.cody_idx and item_category = '신발' and cody_gender = 1
+	</select>
+	<select id="selectListShoeWoman" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from cody.cody ,cody.item where cody.cody_idx=item.cody_idx and item_category = '신발' and cody_gender = 0
+	</select>
+	<select id="selectListAcc" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from item where item_category = "악세사리"
+	</select>
+	<select id="selectListAccMan" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from cody.cody ,cody.item where cody.cody_idx=item.cody_idx and item_category = '악세사리' and cody_gender = 1
+	</select>
+	<select id="selectListAccWoman" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from cody.cody ,cody.item where cody.cody_idx=item.cody_idx and item_category = '악세사리' and cody_gender = 0
+	</select>
+	
+
+	<select id="selectByName" resultType="com.bitcamp.cody.dto.ItemDto">
+		select * from item where item_name = #{name}
+	</select>
+	
+	<select id="itemCount" resultType="int">
+		select count(*) from item where member_idx = #{memberIdx}
+	</select>
+ 
+ 
+	<!-- insert 태그는 데이터베이스에 데이터를 삽입하는 insert구문을 사용할 때 사용 -->
+	<!-- ID : 외부에서 해당 태그를 부를 때 사용하는 식별 이름, 메퍼 파일안에서 중복 X parameterType : 여러 
+		데이터를 하나의 객체에 담아서 받을 때 해당 객체 타입으로 지정 -->
+		
+	<insert id="insertItem" parameterType="com.bitcamp.cody.dto.ItemDto" useGeneratedKeys="true" keyProperty="idx">
+		insert into item (item_name, item_brand, item_image, item_price, item_category, item_color, cody_idx, member_idx )
+		values ( #{item_name}, #{item_brand}, #{item_image}, #{item_price}, #{item_category}, #{item_color}, #{cody_idx}, #{member_idx} )
+	</insert>
+
+	<insert id="insertListItem" parameterType="com.bitcamp.cody.dto.ItemDto" useGeneratedKeys="true" keyProperty="idx">
+		insert into item (item_name, item_brand, item_image, item_price, item_category, item_color, cody_idx, member_idx, item_link )
+		values
+		<foreach collection="list" item="item" index="index" separator=" , ">
+		 ( #{item.item_name}, #{item.item_brand}, #{item.item_image}, #{item.item_price}, 
+		#{item.item_category}, #{item.item_color}, #{item.cody_idx}, #{item.member_idx}, #{item.item_link} )
+		</foreach>
+	</insert>
+
+	<update id="updateItem" parameterType="com.bitcamp.cody.dto.ItemDto">
+		update item set item_name = #{item_name}, item_brand = #{item_brand}, item_image = #{item_image},
+		item_price = #{item_price}, item_category = #{item_category}, item_color = #{item_color} where item_idx = #{item_idx}
+	</update>
+
+	
+	<delete id="deleteItem" parameterType="com.bitcamp.cody.dto.ItemDto">
+		delete from item where item_idx = #{itemIdx}
+	</delete>
+
+	<delete id="deleteCodyItem" parameterType="com.bitcamp.cody.dto.ItemDto">
+		delete from item where cody_idx = #{codyIdx}
+	</delete>
+	
+ 
+
+
+
+
+
+</mapper>
+	

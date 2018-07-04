@@ -1,0 +1,112 @@
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Dao 에서 메퍼 설정에서 필요한 엘리먼트(설정) 호출할때 식별자 역할 : 필수 -->
+<mapper namespace="com.bitcamp.cody.dao.RepleDao">
+
+	<!-- select 구문일 때 사용하는 태그 -->
+	<!-- ID : 외부에서 해당 태그를 부를 때 사용하는 식별 이름, 메퍼 파일안에서 중복 X resultType : 질의의 결과를 
+		지정하는 클래스타입의 객체에 데이터 메핑 parameterType : 여러 데이터를 하나의 객체에 담아서 받을 때 해당 객체 타입으로 
+		지정 -->
+
+	<select id="selectByIdx" resultType="com.bitcamp.cody.dto.RepleDto">
+		select *
+		from reple
+		where reple_idx = #{idx} 
+	</select>
+
+	<select id="selectList" resultType="com.bitcamp.cody.dto.RepleDto">
+		select *
+		from reple
+		where cody_idx = #{idx}
+		order by regroup asc, reorder asc  
+	</select>
+
+	<!-- 첫댓글 저장시 그룹값 증가 -->
+	<select id="maxSelect" resultType="int">
+		select max(regroup)+1
+		from reple
+	</select>
+	
+	<!-- 첫댓글 입력 -->
+	<insert id="repleInsert" parameterType="com.bitcamp.cody.dto.RepleDto">
+		insert into reple (regroup ,reple_contents, member_idx, cody_idx) values (#{regroup}, #{reple_contents}, #{member_idx}, #{cody_idx} )
+	</insert>
+	
+	<!-- 첫댓글 저장된 댓글찾기 -->
+	<select id="selectinfo" resultType="com.bitcamp.cody.dto.RepleDto" parameterType="com.bitcamp.cody.dto.RepleDto">
+		select * from reple where cody_idx=#{cody_idx} and member_idx=#{member_idx} and reple_contents=#{reple_contents} order by reple_date desc limit 1;
+	</select>
+	
+	<!-- 대댓글 입력 -->
+	<insert id="re_repleInsert" parameterType="com.bitcamp.cody.dto.RepleDto">
+		insert into reple (regroup ,reparent, redepth, reorder, reple_contents, member_idx, cody_idx)
+		values ( #{regroup}, #{reparent}, #{redepth}+1 , #{reorder}+1, #{reple_contents}, #{member_idx}, #{cody_idx} )
+	</insert>
+
+	<!-- 대댓글 저장시 댓글의 순서 변경 -->
+	<update id="reorderPlus" parameterType="com.bitcamp.cody.dto.RepleDto">
+		update reple set reorder = reorder+1
+		where reorder > #{reorder} or reorder = #{reorder} and regroup=#{regroup} and reple_idx not in(#{reple_idx})
+	</update>
+
+	<select id="maxIdx" resultType="int">
+		select max(reple_idx)
+		from reple
+	</select>
+
+	<!-- 자식 댓글이 있는지 찾기 -->
+	<select id="childReple" resultType="com.bitcamp.cody.dto.RepleDto">
+		select * from reple where reparent = #{idx}
+	</select>
+	
+	<update id="repleUpdate" parameterType="com.bitcamp.cody.dto.RepleDto">
+		update reple set reple_contents = #{reple_contents} where reple_idx=#{reple_idx}
+	</update>
+	
+	<!-- 댓글삭제 -->
+	<delete id="repleDelete" parameterType="com.bitcamp.cody.dto.RepleDto">
+		delete from reple where reple_idx = #{idx}
+	</delete>
+	
+	<!-- 코디댓글 전체삭제 -->
+	<delete id="repleAllDelete" parameterType="com.bitcamp.cody.dto.RepleDto">
+		delete from reple where cody_idx = #{idx}
+	</delete>
+
+	<!-- 알림 확인후 수신여부값 모두 변경 -->
+	<update id="receptionUpdate" parameterType="com.bitcamp.cody.dto.RepleDto">
+		update reple set reception = false
+	</update>
+
+	<!-- 알림 확인후 수신여부값 변경 -->
+	<update id="recepUpdate" parameterType="com.bitcamp.cody.dto.RepleDto">
+		update reple set reception = false where reple_idx=#{idx}
+	</update>
+	
+	
+
+	<!-- 알림 수신여부 확인하기 -->
+	<select id="selectReception" resultType="int" parameterType="com.bitcamp.cody.dto.RepleDto">
+		select max(reception)
+		from reple
+		where member_idx = #{idx}
+	</select>
+	
+	<!-- 페이징 처리 -->
+	<!-- 알림 데이터 리스트 -->
+	<select id="noticeList" resultType="com.bitcamp.cody.dto.RepleDto" parameterType="hashmap" >
+		select *
+        from reple
+        where reception=true and cody_idx in (select cody_idx from cody where member_idx = #{idx}) 
+        order by reple_date desc limit #{offset}, #{noOfRecords}
+	</select>
+	
+	<!-- 알림글 총 개수 -->
+	<select id="totalCnt" resultType="int">
+		select count(*) from reple
+		where reception=true and cody_idx in (select cody_idx from cody where member_idx = #{idx})
+	</select>
+
+</mapper>

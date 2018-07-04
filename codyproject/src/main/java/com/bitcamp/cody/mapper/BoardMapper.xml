@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Dao 에서 메퍼 설정에서 필요한 엘리먼트(설정) 호출할때 식별자 역할 : 필수 -->
+<mapper namespace="com.bitcamp.cody.dao.BoardDao">
+
+	<!-- 게시글 전체리스트 -->
+	<select id="selectList" parameterType="hashmap" resultType="com.bitcamp.cody.dto.BoardDto">
+		select * from board order by board_idx desc limit #{offset}, #{noOfRecords}
+	</select>
+
+	<select id="totalCnt" resultType="int">
+		select count(*) from board
+	</select>
+	
+	<!-- 게시글 상세보기 -->
+	<select id="selectByIdx" resultType="com.bitcamp.cody.dto.BoardDto">
+		select * from board
+		where board_idx = #{idx}
+	</select>
+
+	<!-- 게시글 입력 -->
+	<insert id="insertBoard" parameterType="hashmap">
+		insert into board
+		(board_title, board_contents, name, man_idx) values(#{title}, #{content}, #{name}, #{idx})
+	</insert>
+	
+	<!-- 조회수 증가 -->
+	<update id="countAdd" parameterType="hashmap">
+		update board set board_click = #{count}+1 where board_idx = #{idx}
+	</update>
+
+	<!-- 게시글 수정 -->
+	<update id="updateBoard" parameterType="com.bitcamp.cody.dto.BoardDto">
+		update board set board_title = #{board_title}, board_contents = #{board_contents}
+	</update>
+
+	<!-- 게시글 삭제 -->
+	<delete id="deleteBoard" parameterType="com.bitcamp.cody.dto.BoardDto">
+		delete from board where board_idx = #{idx}
+	</delete>
+
+
+
+</mapper>
